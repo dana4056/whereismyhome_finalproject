@@ -15,7 +15,8 @@
 	<select id="select" parameterType="map" resultType="Qna">
 		select * 
 		from qna 
-		order by id desc limit #{currentPage},#{numPerPage}
+		order by id desc 
+		limit #{currentPage},#{numPerPage}
 	</select>
 	
 	
@@ -24,7 +25,7 @@
 	<select id="selectbygood" parameterType="map" resultType="Qna">
 		select * 
 		from qna 
-		order by good desc 
+		order by good desc, id desc 
 		limit #{currentPage},#{numPerPage}
 	</select>
 	
@@ -33,7 +34,7 @@
 	<select id="selectbyview" parameterType="map" resultType="Qna">
 		select * 
 		from qna 
-		order by view desc 
+		order by view desc, id desc 
 		limit #{currentPage},#{numPerPage}
 	</select>
 	

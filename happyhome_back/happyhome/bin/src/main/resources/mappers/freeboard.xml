@@ -15,7 +15,13 @@
 	<select id="select" parameterType="map" resultType="Freeboard">
 		select * 
 		from freeboard 
-		order by id desc limit #{currentPage},#{numPerPage}		
+		
+		<if test='type != 0'>
+		where type = #{type}
+ 		</if>
+		
+		order by id desc 
+		limit #{currentPage},#{numPerPage}		
 	</select>
 	
 		<!-- public List<Freeboard> selectbygood(int currentPage, int numPerPage) throws 
@@ -23,6 +29,11 @@
 	<select id="selectbygood" parameterType="map" resultType="Freeboard">
 		select * 
 		from freeboard 
+		
+		<if test='type != 0'>
+		where type = #{type}
+ 		</if>
+		
 		order by good desc 
 		limit #{currentPage},#{numPerPage}		
 	</select>
@@ -32,7 +43,13 @@
 	<select id="selectbyview" parameterType="map" resultType="Freeboard">
 		select * 
 		from freeboard 
-		order by view desc limit #{currentPage},#{numPerPage}		
+		
+		<if test='type != 0'>
+		where type = #{type}
+ 		</if>
+		
+		order by view desc 
+		limit #{currentPage},#{numPerPage}		
 	</select>
 	
 	<!-- public Freeboard getFreeboard(int id) throws SQLException; -->

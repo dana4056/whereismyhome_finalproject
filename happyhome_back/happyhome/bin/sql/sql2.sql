@@ -164,7 +164,7 @@ DROP TABLE IF EXISTS `freeboard`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `freeboard` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(40) NOT NULL,
+  `type` int NOT NULL,
   `title` varchar(40) NOT NULL DEFAULT '0',
   `writer` varchar(40) NOT NULL,
   `content` text NOT NULL,
@@ -180,7 +180,7 @@ CREATE TABLE `freeboard` (
 
 LOCK TABLES `freeboard` WRITE;
 /*!40000 ALTER TABLE `freeboard` DISABLE KEYS */;
-INSERT INTO `freeboard` VALUES (1,'맛집추천','free제목1', '고길동','free내용1',1,0),(2,'맛집추천','free제목2', '고길동','free내용2',0,0),(3,'맛집추천','free제목3', '고길동','free내용3',0,0),(4,'맛집추천','free제목4', '고길동','free내용4',0,0),(5,'맛집추천','free제목5', '고길동','free내용5',0,0),(6,'맛집추천','free제목6', '고길동','free내용6',0,0),(7,'맛집추천','free제목7', '고길동','free내용7',0,0),(8,'맛집추천','free제목8', '고길동','free내용8',0,0),(9,'맛집추천','free제목9', '고길동','free내용9',0,0),(10,'맛집추천','free제목10', '고길동','free내용10',0,0),(11,'맛집추천','free제목11', '고길동','free내용11',0,0),(12,'맛집추천','free제목12', '고길동','free내용12',0,0),(13,'맛집추천','free제목13', '고길동','free내용13',0,0),(14,'맛집추천','free제목14', '고길동','free내용14',0,0),(15,'맛집추천','free제목15', '고길동','free내용15',0,0),(16,'맛집추천','free제목16', '고길동','free내용16',0,0);
+INSERT INTO `freeboard` VALUES (1,3,'free제목1', '고길동','free내용1',1,0),(2,3,'free제목2', '고길동','free내용2',0,0),(3,3,'free제목3', '고길동','free내용3',0,0),(4,2,'free제목4', '고길동','free내용4',0,0),(5,3,'free제목5', '고길동','free내용5',0,0),(6,2,'free제목6', '고길동','free내용6',0,0),(7,1,'free제목7', '고길동','free내용7',0,0),(8,4,'free제목8', '고길동','free내용8',0,0),(9,1,'free제목9', '고길동','free내용9',0,0),(10,3,'free제목10', '고길동','free내용10',0,0),(11,3,'free제목11', '고길동','free내용11',0,0),(12,2,'free제목12', '고길동','free내용12',0,0),(13,2,'free제목13', '고길동','free내용13',0,0),(14,1,'free제목14', '고길동','free내용14',0,0),(15,2,'free제목15', '고길동','free내용15',0,0),(16,1,'free제목16', '고길동','free내용16',0,0);
 /*!40000 ALTER TABLE `freeboard` ENABLE KEYS */;
 UNLOCK TABLES;
 
