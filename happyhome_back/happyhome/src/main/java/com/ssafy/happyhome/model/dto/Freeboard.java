@@ -15,6 +15,7 @@ public class Freeboard {
 	private String type;
 	private String title;
 	private String writer;
+	private String area;
 	private String content;
 	private int view;  //보통 언더바(red_id)보다  낙타표기법 사용
 	private int good;

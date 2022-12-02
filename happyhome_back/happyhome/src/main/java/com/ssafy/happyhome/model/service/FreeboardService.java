@@ -11,9 +11,10 @@ import com.ssafy.happyhome.model.dto.Freeboard;
 public interface FreeboardService {
 	
 	int insert(Freeboard freeboard) throws SQLException;
+	public List<Freeboard> selectByArea(int currentPage, int numPerPage, int type, String area) throws SQLException;
 	List<Freeboard> select(int currentPage, int numPerPage, int type) throws SQLException;
-	List<Freeboard> selectbygood(int currentPage, int numPerPage, int type) throws SQLException;
-	List<Freeboard> selectbyview(int currentPage, int numPerPage, int type) throws SQLException;
+	List<Freeboard> selectbygood(int currentPage, int numPerPage, int type, String area) throws SQLException;
+	List<Freeboard> selectbyview(int currentPage, int numPerPage, int type, String area) throws SQLException;
 	int getSize() throws SQLException;
 	Freeboard getFreeboard(int id) throws SQLException;
 	

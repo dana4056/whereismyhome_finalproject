@@ -43,42 +43,47 @@ public class FreeboardController {
 	@Autowired
 	FreeboardService service;
 
-	// 공지사항 리스트 조회
+
+	
+	// 커뮤니티 리스트 조회
 	@GetMapping("/freeboards")
-	public ResponseEntity<?> getFreeboardList(@RequestParam("page") int currentPage, @RequestParam("type") int type) {
-
+	public ResponseEntity<?> getFreeboardList(@RequestParam("page") int currentPage, @RequestParam("type") int type,  @RequestParam("area") String area) {
+		
 		try {
 			int numPerPage = 10;
+			
+			List<Freeboard> list = null;
+			
+			list = service.selectByArea((currentPage - 1) * numPerPage, numPerPage, type, area);	
 
-			List<Freeboard> list = service.select((currentPage - 1) * numPerPage, numPerPage, type);
 			int freeboardNum = service.getSize();
 			int pageCount = getPageCount(10, freeboardNum);
-
+			
 			if (list != null && list.size() != 0) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("list", list);
 				map.put("freeboardNum", freeboardNum);
 				map.put("pageCount", pageCount);
-
+				
 				return new ResponseEntity<Map>(map, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return exceptionHandling(e);
 		}
 	}
 
-	// 공지사항 리스트 조회
+	// 커뮤니티 리스트 조회
 	@GetMapping("/freeboardsbygood")
-	public ResponseEntity<?> getFreeboardListbygood(@RequestParam("page") int currentPage, @RequestParam("type") int type) {
+	public ResponseEntity<?> getFreeboardListbygood(@RequestParam("page") int currentPage, @RequestParam("type") int type, @RequestParam("area") String area) {
 
 		try {
 			int numPerPage = 10;
 
-			List<Freeboard> list = service.selectbygood((currentPage - 1) * numPerPage, numPerPage, type);
+			List<Freeboard> list = service.selectbygood((currentPage - 1) * numPerPage, numPerPage, type, area);
 			int freeboardNum = service.getSize();
 			int pageCount = getPageCount(10, freeboardNum);
 
@@ -99,14 +104,14 @@ public class FreeboardController {
 		}
 	}
 
-	// 공지사항 리스트 조회
+	// 커뮤니티 리스트 조회
 	@GetMapping("/freeboardsbyview")
-	public ResponseEntity<?> getFreeboardListbyview(@RequestParam("page") int currentPage, @RequestParam("type") int type) {
+	public ResponseEntity<?> getFreeboardListbyview(@RequestParam("page") int currentPage, @RequestParam("type") int type, @RequestParam("area") String area) {
 
 		try {
 			int numPerPage = 10;
 
-			List<Freeboard> list = service.selectbyview((currentPage - 1) * numPerPage, numPerPage, type);
+			List<Freeboard> list = service.selectbyview((currentPage - 1) * numPerPage, numPerPage, type, area);
 			int freeboardNum = service.getSize();
 			int pageCount = getPageCount(10, freeboardNum);
 
@@ -127,7 +132,7 @@ public class FreeboardController {
 		}
 	}
 
-	// 공지사항 게시물 조회
+	// 커뮤니티 게시물 조회
 	@GetMapping("/freeboard/{no}")
 	public ResponseEntity<?> getFreeboard(@PathVariable("no") int no) {
 
@@ -149,7 +154,7 @@ public class FreeboardController {
 		}
 	}
 
-	// 공지사항 등록(제목이랑 내용만 기입)
+	// 커뮤니티 등록(제목이랑 내용만 기입)
 	@PostMapping("/freeboard")
 	public ResponseEntity<?> createFreeboard(@RequestBody Freeboard freeboard) {
 
@@ -168,7 +173,7 @@ public class FreeboardController {
 		}
 	}
 
-	// 공지사항 수정
+	// 커뮤니티 수정
 	@PutMapping("/freeboard/{no}")
 	public ResponseEntity<?> updateFreeboard(@PathVariable("no") int no, @RequestBody Freeboard freeboard) {
 		System.out.println("수정");
@@ -198,7 +203,7 @@ public class FreeboardController {
 		}
 	}
 
-	// 공지사항 삭제
+	// 커뮤니티 삭제
 	@DeleteMapping("/freeboard/{no}/{id}")
 	public ResponseEntity<?> deleteFreeboard(@PathVariable("no") int no) {
 

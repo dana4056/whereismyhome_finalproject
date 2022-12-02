@@ -84,9 +84,12 @@
                   <img @click="clkHeart('I')" v-else src="@/assets/heart-e.png" alt=""/>
                 </div>
                 <div>
-                  <img class="new-result-btn"
-                    @click=kakaoShare()
-                    src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
+                  <a id="kakaotalk-sharing-btn" href="#">
+                    <img class="new-result-btn"
+                      id="kakaotalk-sharing-btn"
+                      @click=kakaoShare()
+                      src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"/>
+                  </a>
                 </div>
               </div>
             </div>
@@ -597,70 +600,31 @@ export default {
 
     
     kakaoShare() {
-      // window.Kakao.Share.sendCustom({
-      //   templateId: 83333,
-      //   // 카카오톡이 설치 되지 않았을때 마켓으로 이동
-      //   installTalk: true
-      // });
 
-      window.Kakao.Share.sendDefault({
-      objectType: 'feed',
-      installTalk: true,
-  content: {
-    title: this.kakaoinfo2,
-    description: this.kakaoinfo1,
-    imageUrl:'https://s3.us-west-2.amazonaws.com/secure.notion-static.com/809666c8-63bd-4846-86b8-4e4060ccc453/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221124%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221124T082307Z&X-Amz-Expires=86400&X-Amz-Signature=2d2cc5b0c2a4731d5ea69acacd8a5e4ade6d2c0fc91d688a245ad42082512673&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject',
-    link: {
-      mobileWebUrl: 'https://developers.kakao.com',
-      webUrl: 'https://developers.kakao.com',
-    },
-  },
-  // itemContent: {
-  //   profileText: 'Kakao',
-  //   profileImageUrl: 'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
-  //   titleImageUrl: 'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png',
-  //   titleImageText: 'Cheese cake',
-  //   titleImageCategory: 'Cake',
-  //   items: [
-  //     {
-  //       item: 'Cake1',
-  //       itemOp: '1000원',
-  //     },
-  //     {
-  //       item: 'Cake2',
-  //       itemOp: '2000원',
-  //     },
-  //     {
-  //       item: 'Cake3',
-  //       itemOp: '3000원',
-  //     },
-  //     {
-  //       item: 'Cake4',
-  //       itemOp: '4000원',
-  //     },
-  //     {
-  //       item: 'Cake5',
-  //       itemOp: '5000원',
-  //     },
-  //   ],
-  //   sum: '총 결제금액',
-  //   sumOp: '15000원',
-  // },
-  // social: {
-  //   likeCount: 10,
-  //   commentCount: 20,
-  //   sharedCount: 30,
-  // },
-  buttons: [
-    {
-      title: '카카오 맵으로',
-      link: {
-        mobileWebUrl: 'https://map.kakao.com/',
-        webUrl: 'https://map.kakao.com/',
-      },
-    },
-  ],
-});
+      window.Kakao.Share.createDefaultButton({
+        container: '#kakaotalk-sharing-btn',
+        objectType: 'location',
+        address:this.detail.addr,
+        addressTitle:this.detail.apartmentName,
+        content: {
+          title: this.kakaoinfo2,
+          description: this.kakaoinfo1,
+          imageUrl:'https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b536479e-85bf-4a1d-b7c0-e24ebaf3a784/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221202%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221202T134329Z&X-Amz-Expires=86400&X-Amz-Signature=edbc35568f2a5936485943023387a64b138ec2fa2c0d350907815312f6a80750&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject',
+          link: {
+            mobileWebUrl: 'https://developers.kakao.com',
+            webUrl: 'https://developers.kakao.com',
+          },
+        },
+        buttons: [
+          {
+            title: '카카오 맵으로',
+            link: {
+              mobileWebUrl: 'https://map.kakao.com/',
+              webUrl: 'https://map.kakao.com/',
+            },
+          },
+        ],
+      });
     },
 
   },

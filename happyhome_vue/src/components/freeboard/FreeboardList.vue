@@ -7,9 +7,9 @@
       </caption>
 
       <div class="form-box">
-        <select v-model="interIdx" class="form-select" id="interestSel">
+        <select v-model="interest" class="form-select" id="interestSel" @change="fetchListArea">
           <option value="">관심 지역 선택</option>
-          <option :key="index" :value="index" v-for="(interest, index) in fetchInterestList">
+          <option :key="index" :value="interest.area" v-for="(interest, index) in fetchInterestList">
             {{ interest.area }}
           </option>
         </select>
@@ -54,11 +54,16 @@
           <div class="ElMiddle">
             <p class="ElTitle">{{freeboard.title}}</p>
             <p>{{freeboard.content}}</p>
-            <small><i class="fa-solid fa-user"></i> {{freeboard.writer}}</small>
+            <div>
+              <small><i class="fa-solid fa-user"></i> {{freeboard.writer}}</small>
+            </div>
           </div>
           <div class="ElRight">
-            <small><i class="fa-regular fa-eye"></i> {{freeboard.view}}</small>
-            <small><i class="fa-regular fa-heart"></i> {{freeboard.good}}</small>
+            <small>{{freeboard.area}}</small>
+            <div>
+              <small><i class="fa-regular fa-eye"></i> {{freeboard.view}}</small>
+              <small><i class="fa-regular fa-heart"></i> {{freeboard.good}}</small>
+            </div>
           </div> 
         </div>
       </div>
@@ -91,12 +96,14 @@ export default {
       sortType: 1,
       malType: 0,
       types: ["전체", "맛집추천", "취미공유", "부탁해요", "분실신고"],
+      interest:""
     } 
   },
   created() {
     const temp = {
         p: 1,
-        type: 0,        
+        type: 0,    
+        area:this.interest    
         }
     this.$store.dispatch('getFreeboardList', temp);
   },
@@ -137,6 +144,14 @@ export default {
     },
   },
   methods:{
+    fetchListArea(){
+      const temp = {
+          p: 1,
+          type: 0, 
+          area:this.interest      
+          }
+      this.$store.dispatch('getFreeboardList', temp);
+    },
     movePage(id){
       // location.href = `/freeboard/view/${id}`;
       this.$router.push(`/freeboard/view/${id}`);
@@ -146,7 +161,8 @@ export default {
 
       const temp = {
         p: 1,
-        type: this.malType,        
+        type: this.malType,    
+        area:this.interest    
         }
 
       
@@ -168,7 +184,8 @@ export default {
 
       const temp = {
         p: this.$store.state.page,
-        type: this.malType,        
+        type: this.malType,  
+        area:this.interest      
         }
 
 
@@ -193,7 +210,8 @@ export default {
 
       const temp = {
         p: 1,
-        type: this.malType,        
+        type: this.malType,   
+        area:this.interest      
         }
 
       // 1 : 최신 순으로 정렬
@@ -216,7 +234,8 @@ export default {
 
       const temp = {
         p: 1,
-        type: this.malType,        
+        type: this.malType,    
+        area:this.interest    
         }
       
       // 1 : 최신 순으로 정렬
@@ -242,7 +261,8 @@ export default {
 
       const temp = {
         p: page,
-        type: this.malType,        
+        type: this.malType,      
+        area:this.interest,  
         }
       
       // 1 : 최신 순으로 정렬한 상태에서 움직임
@@ -762,8 +782,10 @@ tbody tr{
 }
 .ElRight{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-end;
+  justify-content: space-between;
+  color: #a1a1a1;
 }
 .ElRight small{
   padding:0 6px;

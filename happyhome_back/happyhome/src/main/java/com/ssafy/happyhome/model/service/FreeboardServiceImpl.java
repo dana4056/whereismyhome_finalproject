@@ -25,6 +25,11 @@ public class FreeboardServiceImpl implements FreeboardService {
 	public int insert(Freeboard freeboard) throws SQLException {
 		return freeboardDao.insert(freeboard);
 	}
+	
+	@Override
+	public List<Freeboard> selectByArea(int currentPage, int numPerPage, int type, String area) throws SQLException {
+		return freeboardDao.selectByArea(currentPage, numPerPage, type, area);
+	}
 
 	@Override
 	public List<Freeboard> select(int currentPage, int numPerPage, int type) throws SQLException {
@@ -32,13 +37,13 @@ public class FreeboardServiceImpl implements FreeboardService {
 	}
 	
 	@Override
-	public List<Freeboard> selectbyview(int currentPage, int numPerPage, int type) throws SQLException {
-		return freeboardDao.selectbyview(currentPage, numPerPage, type);
+	public List<Freeboard> selectbyview(int currentPage, int numPerPage, int type, String area) throws SQLException {
+		return freeboardDao.selectbyview(currentPage, numPerPage, type,area);
 	}
 	
 	@Override
-	public List<Freeboard> selectbygood(int currentPage, int numPerPage, int type) throws SQLException {
-		return freeboardDao.selectbygood(currentPage, numPerPage, type);
+	public List<Freeboard> selectbygood(int currentPage, int numPerPage, int type, String area) throws SQLException {
+		return freeboardDao.selectbygood(currentPage, numPerPage, type,area);
 	}
 
 	@Override
@@ -76,5 +81,6 @@ public class FreeboardServiceImpl implements FreeboardService {
 	public void minusgood(String id, int freeboardid) throws SQLException {
 		freeboardDao.minusgood(id, freeboardid);
 	}
+
 
 }

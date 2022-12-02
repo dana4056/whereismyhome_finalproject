@@ -359,6 +359,7 @@ export default {
     const params = {
       page: temp.p,
       type: temp.type,
+      area: temp.area,
     };
     console.log(temp);
     http.get(`/freeboards`, { params })
@@ -376,7 +377,8 @@ export default {
     getFreeboardListByView({ commit }, temp) {
       const params = {
         page: temp.p,
-      type: temp.type,
+        type: temp.type,
+        area: temp.area
       };
       console.log(temp);
       http.get(`/freeboardsbyview`, { params })
@@ -393,7 +395,8 @@ export default {
       getFreeboardListByGood({ commit }, temp) {
         const params = {
           page: temp.p,
-      type: temp.type,
+          type: temp.type,
+          area: temp.area
         };
         console.log(temp);
         http.get(`/freeboardsbygood`, { params })

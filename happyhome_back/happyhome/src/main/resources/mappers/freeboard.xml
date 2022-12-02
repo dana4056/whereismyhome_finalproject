@@ -6,10 +6,27 @@
 
 	<!-- public int insert(Freeboard freeboard) throws SQLException; -->
 	<insert id="insert" parameterType="Freeboard">
-		insert into freeboard(title, type, writer, content) 
-		values(#{title}, #{type}, #{writer}, #{content})
+		insert into freeboard(title, type, writer, area, content) 
+		values(#{title}, #{type}, #{writer}, #{area},#{content})
 	</insert>
 
+	<!-- public List<Freeboard> selectByArea(int currentPage, int numPerPage, String area) throws 
+		SQLException; -->
+	<select id="selectByArea" parameterType="map" resultType="Freeboard">
+		select * 
+		from freeboard 
+		
+		<if test='type != 0'>
+		where type = #{type} and area like '%${area}%'
+ 		</if>
+ 		<if test='type == 0 and area != null'>
+		where area like '%${area}%'
+ 		</if>
+ 				
+		order by id desc 
+		limit #{currentPage},#{numPerPage}		
+	</select>
+	
 	<!-- public List<Freeboard> select(int currentPage, int numPerPage) throws 
 		SQLException; -->
 	<select id="select" parameterType="map" resultType="Freeboard">
@@ -17,21 +34,28 @@
 		from freeboard 
 		
 		<if test='type != 0'>
-		where type = #{type}
+		where type = #{type} area like concat('%', #{area} ,'%')
+ 		</if>
+ 		<if test='type == 0'>
+		where area like concat('%', #{area} ,'%')
  		</if>
 		
 		order by id desc 
 		limit #{currentPage},#{numPerPage}		
 	</select>
 	
-		<!-- public List<Freeboard> selectbygood(int currentPage, int numPerPage) throws 
+	
+	<!-- public List<Freeboard> selectbygood(int currentPage, int numPerPage) throws 
 		SQLException; -->
 	<select id="selectbygood" parameterType="map" resultType="Freeboard">
 		select * 
 		from freeboard 
 		
 		<if test='type != 0'>
-		where type = #{type}
+		where type = #{type} and area like concat('%', #{area} ,'%')
+ 		</if>
+ 		<if test='type == 0'>
+		where area like concat('%', #{area} ,'%')
  		</if>
 		
 		order by good desc 
@@ -45,7 +69,10 @@
 		from freeboard 
 		
 		<if test='type != 0'>
-		where type = #{type}
+		where type = #{type} and area like concat('%', #{area} ,'%')
+ 		</if>
+ 		<if test='type == 0'>
+		where area like concat('%', #{area} ,'%')
  		</if>
 		
 		order by view desc 
