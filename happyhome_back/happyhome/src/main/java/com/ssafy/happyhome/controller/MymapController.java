@@ -43,7 +43,7 @@ public class MymapController {
 	@Autowired
 	MymapService service;
 
-	// Q&A 리스트 조회
+	// mymap 리스트 조회
 	@GetMapping("/mymaps")
 	public ResponseEntity<?> getMymapList(@RequestParam("id") String id, @RequestParam("dongcode") String dongcode) {
 
@@ -64,23 +64,23 @@ public class MymapController {
 		}
 	}
 
-	// mymap 하나만 조회
-	@GetMapping("/mymap/{no}")
-	public ResponseEntity<?> getMymap(@PathVariable("no") int no) {
-
-		try {
-			Mymap mymap = service.getMymap(no);
-
-			if (mymap != null) {
-				return new ResponseEntity<Mymap>(mymap, HttpStatus.OK);
-			} else {
-				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return exceptionHandling(e);
-		}
-	}
+//	// mymap 하나만 조회
+//	@GetMapping("/mymap/{no}")
+//	public ResponseEntity<?> getMymap(@PathVariable("no") int no) {
+//
+//		try {
+//			Mymap mymap = service.getMymap(no);
+//
+//			if (mymap != null) {
+//				return new ResponseEntity<Mymap>(mymap, HttpStatus.OK);
+//			} else {
+//				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return exceptionHandling(e);
+//		}
+//	}
 
 	// mymap 등록(제목이랑 내용만 기입)
 	@PostMapping("/mymap")
@@ -120,9 +120,8 @@ public class MymapController {
 		}
 	}
 
-////////////////////////////////////=============수정함==============//////////////////////////////////////
-//마이맵 좋아요 했는지 안했는지
-	@GetMapping("/mymapdidgood")
+	//마이맵 좋아요 했는지 안했는지
+	@GetMapping("/mymap")
 	public ResponseEntity<?> mymapdidgood(@RequestParam("id") String id, @RequestParam("lati") String lati,
 			@RequestParam("longi") String longi) {
 
@@ -140,7 +139,6 @@ public class MymapController {
 			return exceptionHandling(e);
 		}
 	}
-///////////////////////////////********************************************//////////////////////////////////
 
 	// 에러 처리
 	private ResponseEntity<String> exceptionHandling(Exception e) {

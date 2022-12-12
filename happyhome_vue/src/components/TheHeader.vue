@@ -11,8 +11,8 @@
         <b-nav-item href="/notice">공지사항</b-nav-item>
         <b-nav-item href="/qna">Q&A</b-nav-item>
         <!-- <b-nav-item href="/youtube">Youtube</b-nav-item> -->
-        <b-nav-item href="/house/list"> 매물검색</b-nav-item>
-        <b-nav-item href="/freeboard"> 커뮤니티</b-nav-item>
+        <b-nav-item href="/freeboard"> 커뮤니티 </b-nav-item>
+        <b-nav-item href="/house/list">  매물검색</b-nav-item>
       </b-navbar-nav>
 
       <!-- user  -->

@@ -153,8 +153,7 @@ export default {
         // 로봇관련
       areYouRobot: false, //false여야지 로그인 가능
       failCount: 0,
-      // rand: Math.floor(Math.random() * 6 + 1), //랜덤하게
-      rand: 1,
+      rand: Math.floor(Math.random() * 5 + 1), //랜덤하게
       isSelected: [
         false,
         false,
@@ -168,8 +167,8 @@ export default {
       ],
       temp: 0,
       isSignIn:true,
-      robot_title: ["소화기를 선택해주세요.","눈,코,입을 선택해주세요.", "횡단보도를 선택해주세요.","횡단보도를 선택해주세요.", "자전거를 선택해주세요.","신호등을 선택해주세요."],
-      robot_answer: [new Set([4, 5, 7, 8]), new Set([4, 5, 8]), new Set([4, 5, 6]),new Set([5, 6, 7, 8, 9]),new Set([1, 2, 4, 5, 6]),new Set([2, 5]) ],
+      robot_title: ["소화기를 선택해주세요.", "횡단보도를 선택해주세요.","횡단보도를 선택해주세요.", "자전거를 선택해주세요.","신호등을 선택해주세요."],
+      robot_answer: [new Set([4, 5, 7, 8]), new Set([4, 5, 6]),new Set([5, 6, 7, 8, 9]),new Set([1, 2, 4, 5, 6]),new Set([2, 5]) ],
     };
   },
   mounted(){
@@ -246,8 +245,10 @@ export default {
         this.areYouRobot = false;
         this.$toast.success("정답입니다.");
         this.isSelected = [false,false,false,false,false,false,false,false,false];
+        this.Lid="";
+        this.Lpassword="";
         this.failCount = 0;
-        this.rand += 1;
+        this.rand = Math.floor(Math.random() * 5 + 1)
       } else {
         this.$toast.error("오답입니다.");
         this.isSelected = [false,false,false,false,false,false,false,false,false];

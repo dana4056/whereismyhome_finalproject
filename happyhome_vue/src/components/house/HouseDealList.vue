@@ -343,7 +343,7 @@ export default {
         //동이름 -> 좌표
         if (this.fetchDong[i].code == this.dong) {
           geocoder.addressSearch(this.fetchDong[i].name, callback);
-          // this.youtube(encodeURI(this.fetchDong[i].name.split(" ")[1]));
+          this.youtube(encodeURI(this.fetchDong[i].name.split(" ")[1]));
         }
       }
 
@@ -609,7 +609,7 @@ export default {
         content: {
           title: this.kakaoinfo2,
           description: this.kakaoinfo1,
-          imageUrl:'https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b536479e-85bf-4a1d-b7c0-e24ebaf3a784/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221202%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221202T134329Z&X-Amz-Expires=86400&X-Amz-Signature=edbc35568f2a5936485943023387a64b138ec2fa2c0d350907815312f6a80750&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject',
+          imageUrl:'https://s3.us-west-2.amazonaws.com/secure.notion-static.com/b536479e-85bf-4a1d-b7c0-e24ebaf3a784/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221208%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20221208T033547Z&X-Amz-Expires=86400&X-Amz-Signature=193fbcd112f7c22227ac03bff22cc73b88244e4213438032bc039cd18b3d8a2c&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject',
           link: {
             mobileWebUrl: 'https://developers.kakao.com',
             webUrl: 'https://developers.kakao.com',

@@ -89,22 +89,21 @@ export default {
 
   // 공지사항 pin 작업
   setPin({dispatch, commit}, notice) {
-    http.put(`/setpin/${notice.id}`)
+    http.put(`/notice/${notice.id}/pin`)
       .then( (response) => {
         if (response.status == 200) {
-          if (notice.pin === 0) {
+          if (response.data == "FULL") {
+            Vue.$toast.warning("전체 공지사항은 3개 까지만 가능합니다.")
+          }
+          else if (notice.pin === 0) {
             Vue.$toast.success("전체 공지사항에 등록되었습니다. :-)");
           }
           else if(notice.pin === 1) {
             Vue.$toast.success("전체 공지사항에 해제되었습니다. :-)");
-          }
-          else if (response.data === "full") {
-            Vue.$toast.warning("전체 공지사항이 가득 찼습니다.")
-          }
-          
+          }         
           commit("SET_NOTICE", response.data);
           dispatch("getPinNoticeList");
-        } 
+        }
         else {
           Vue.$toast.error("전체 공지사항 등록에 실패하였습니다.");
         }
@@ -116,7 +115,7 @@ export default {
 
   // 공지사항 pin 가져오기
   getPinNoticeList({ commit }) {
-    http.get(`/pinnotices`)
+    http.get(`/notices/pin`)
       .then(({ data }) => {
         commit("SET_PIN_NOTICE_LIST", data);
       })
@@ -125,13 +124,13 @@ export default {
     })
   },
 
-  // 공지사항 검색 가져오기
+  // 키워드로 공지사항 리스트 검색
   searchNoticeList({ commit }, search) {
     const params = {
       keyword: search.keyword,
       page: search.page,
     };
-    http.get(`/search`, { params })
+    http.get(`/notices/search`, { params })
       .then(({ data }) => {
         commit("SET_NOTICE_LIST", data.list);
         commit("SET_PAGE", data.pageCount);
@@ -160,13 +159,29 @@ export default {
       });
   },
 
+  // Q&A 좋아요순으로 가져오기 
+  getQnaListByGood({ commit }, pnum) {
+    const params = {
+      page: pnum,
+    };
+
+    http.get(`/qnas/good`, { params })
+      .then(({ data }) => {
+      commit("SET_QNA_LIST", data.list);
+        commit("SET_PAGE", data.pageCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+
   // Q&A 조회수순으로 가져오기 
   getQnaListByView({ commit }, pnum) {
     const params = {
       page: pnum,
     };
 
-    http.get(`/qnasbyview`, { params })
+    http.get(`/qnas/view`, { params })
       .then( ({ data }) => {
         commit("SET_QNA_LIST", data.list);
         commit("SET_PAGE", data.pageCount);
@@ -176,21 +191,6 @@ export default {
       });
   },
 
-    // Q&A 좋아요순으로 가져오기 
-    getQnaListByGood({ commit }, pnum) {
-      const params = {
-        page: pnum,
-      };
-  
-      http.get(`/qnasbygood`, { params })
-        .then(({ data }) => {
-        commit("SET_QNA_LIST", data.list);
-          commit("SET_PAGE", data.pageCount);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
 
   // Q&A 하나 가져오기
   getQna({ commit }, no) {
@@ -256,7 +256,7 @@ export default {
 
   //댓글 리스트 가져오기
   getCommentList({ commit }, id) {
-    http.get(`/comment/${id}`)
+    http.get(`qna/${id}/comments`)
       .then(({ data }) => {
         commit("SET_COMMENT_LIST", data);
       });
@@ -267,7 +267,7 @@ export default {
     const params = {
       no: comment_no,
     };
-    http.get(`/comment`, { params })
+    http.get(`qna/comment`, { params })
       .then(({ data }) => {
         commit("SET_COMMENT", data);
       });
@@ -275,9 +275,9 @@ export default {
 
   //댓글 등록
   createComment({ dispatch }, comment) {
-    http.post("/comment", comment)
-      .then(({ data }) => {
-        if (data === "success") {
+    http.post("qna/comment", comment)
+      .then((response) => {
+        if (response.status == 200) {
           Vue.$toast.success("등록이 완료되었습니다. :-)")
           dispatch("getCommentList", comment.id);
         } else {
@@ -288,9 +288,9 @@ export default {
 
   //댓글 수정
   updateComment({ dispatch }, payload) {
-    http.put(`/comment`, payload.list)
-      .then(({ data }) => {
-        if (data === "success") {
+    http.put(`qna/comment`, payload.list)
+      .then((response) => {
+        if (response.status == 200) {
           dispatch("getCommentList", payload.id);
           Vue.$toast.success("수정되었습니다. :-)")
         } else {
@@ -301,9 +301,9 @@ export default {
 
   //댓글 삭제
   deleteComment({ dispatch }, payload) {
-    http.delete(`/comment/${payload.comment_no}`)
-      .then(({ data }) => {
-        if (data === "success") {
+    http.delete(`qna/comment/${payload.comment_no}`)
+      .then((response) => {
+        if (response.status == 200) {
           Vue.$toast.success("삭제가 완료되었습니다. :-)")
           dispatch("getCommentList", payload.id);
         } else {
@@ -315,7 +315,7 @@ export default {
   
   //QnA 좋아요 토글
   qnaGood({  dispatch, commit }, qna) {
-    http.put(`/qnagood/${qna.qnaid}/${qna.id}`)
+    http.put(`/qna/${qna.qnaid}/good/${qna.id}`)
       .then((response) => {
         if (response.status == 200) {
           if (qna.good == 0) {
@@ -337,7 +337,7 @@ export default {
 
   // QnA 좋아요 여부 확인
   qnaGoodCheck({ commit }, qna) {
-    http.get(`/qnadidgood/${qna.qnaid}/${qna.id}`)
+    http.get(`/qna/${qna.qnaid}/good/${qna.id}`)
       .then((response) => {
         if (response.status == 200) {
           commit("SET_QNAGOOD", response.data);
@@ -381,7 +381,7 @@ export default {
         area: temp.area
       };
       console.log(temp);
-      http.get(`/freeboardsbyview`, { params })
+      http.get(`/freeboards/view`, { params })
         .then( ({ data }) => {
           commit("SET_FREEBOARD_LIST", data.list);
           commit("SET_PAGE", data.pageCount);
@@ -399,7 +399,7 @@ export default {
           area: temp.area
         };
         console.log(temp);
-        http.get(`/freeboardsbygood`, { params })
+        http.get(`/freeboards/good`, { params })
           .then(({ data }) => {
           commit("SET_FREEBOARD_LIST", data.list);
             commit("SET_PAGE", data.pageCount);
@@ -413,7 +413,7 @@ export default {
       
     //Freeboard 좋아요 토글
     freeboardGood({  dispatch, commit }, freeboard) {
-      http.put(`/freeboardgood/${freeboard.freeboardid}/${freeboard.id}`)
+      http.put(`/freeboard/${freeboard.freeboardid}/good/${freeboard.id}`)
         .then((response) => {
           if (response.status == 200) {
             if (freeboard.good == 0) {
@@ -435,7 +435,7 @@ export default {
   
     // Freeboard 좋아요 여부 확인
     freeboardGoodCheck({ commit }, freeboard) {
-      http.get(`/freeboarddidgood/${freeboard.freeboardid}/${freeboard.id}`)
+      http.get(`/freeboard/${freeboard.freeboardid}/good/${freeboard.id}`)
         .then((response) => {
           if (response.status == 200) {
             commit("SET_FREEBOARDGOOD", response.data);
@@ -514,7 +514,7 @@ export default {
 
   //댓글 리스트 가져오기
   getComment2List({ commit }, id) {
-    http.get(`/comment2/${id}`)
+    http.get(`freeboard/${id}/comments`)
       .then(({ data }) => {
         commit("SET_COMMENT2_LIST", data);
       });
@@ -527,7 +527,7 @@ export default {
       no: comment_no,
     };
 
-    http.get(`/comment2`, { params })
+    http.get(`freeboard/comment`, { params })
       .then(({ data }) => {
         commit("SET_COMMENT2", data);
       });
@@ -536,9 +536,9 @@ export default {
   //댓글 등록
   createComment2({ dispatch }, comment) {
     http.post("/comment2", comment)
-      .then(({ data }) => {
+      .then((response) => {
 
-        if (data === "success") {
+        if (response.status == 200) {
           Vue.$toast.success("등록이 완료되었습니다. :-)")
           dispatch("getComment2List", comment.id);
         } else {
@@ -550,8 +550,8 @@ export default {
   //댓글 수정
   updateComment2({ dispatch }, payload) {
     http.put(`/comment2`, payload.list)
-      .then(({ data }) => {
-        if (data === "success") {
+      .then((response) => {
+        if (response.status == 200) {
           dispatch("getComment2List", payload.id);
           Vue.$toast.success("수정되었습니다. :-)")
         } else {
@@ -563,8 +563,8 @@ export default {
   //댓글 삭제
   deleteComment2({ dispatch }, payload) {
     http.delete(`/comment2/${payload.comment_no}`)
-      .then(({ data }) => {
-        if (data === "success") {
+      .then((response) => {
+        if (response.status == 200) {
           Vue.$toast.success("삭제가 완료되었습니다. :-)")
           dispatch("getComment2List", payload.id);
         } else {
@@ -647,7 +647,7 @@ export default {
 
   // 관심지역 전부 가져오기
   getInterestAreaList({ commit }, id) {
-    http.get(`interest/${id}`)
+    http.get(`interests/${id}`)
       .then(({ data }) => {
         console.log(data);
         commit("SET_INTEREST_AREA", data);
@@ -659,17 +659,16 @@ export default {
 
   // 관심지역 삭제하기
   interestDelete({dispatch}, interest) {
-    http.delete(`/interest/${interest.id}/${interest.dongCode}`)
-      .then(({ data }) => {
-        if (data === "success") {
+    http.delete(`${interest.id}/interest/${interest.dongCode}`)
+      .then((response) => {
+        if (response.status == 200) {
           Vue.$toast.success("삭제가 완료되었습니다. :-)");
           dispatch("getInterestAreaList", interest.id);
+        } else {
+          Vue.$toast.error("삭제 중 문제가 발생했습니다.");
+          router.replace("/");
         }
       })
-      .catch(() => {
-        Vue.$toast.error("삭제 중 문제가 발생했습니다.");
-        router.replace("/");
-      });
   },
 
   //=======================마이맵 관련===========================
@@ -751,28 +750,24 @@ export default {
           commit("SET_LOGINUSER", response.data);
           Vue.$toast.success("로그인에 성공하였습니다. :-)");
           router.replace("/");
+        } else {
+          Vue.$toast.error("로그인에 실패하였습니다.");
+          console.log("로그인실패")
         }
-      })
-      .catch(() => {
-        Vue.$toast.error("로그인에 실패하였습니다.");
-        
-        router.replace(`/user/login`);
       })
   },
 
   userDel({ commit }, payload) {
     http.delete(`/user/${payload.id}`)
-      .then(({ data }) => {
-        if (data === "success") {
+      .then((response) => {
+        if (response.status == 200) {
           Vue.$toast.success("삭제가 완료되었습니다. :-)");
           commit("SET_LOGOUT");
+        } else {
+          Vue.$toast.error("삭제 중 문제가 발생했습니다.");
         }
         router.replace("/");
       })
-      .catch(() => {
-        Vue.$toast.error("삭제 중 문제가 발생했습니다.");
-        router.replace("/");
-      });
   },
 
   userLogout({ commit }) {
@@ -781,7 +776,7 @@ export default {
   },
 
   sendEMail({ commit }, sendmail) {
-    http.post(`/check/findPw/sendEmail`, sendmail)
+    http.post(`/user/find-pw`, sendmail)
     .then((response) => {
       if (response.status == 200) {
         Vue.$toast.success("이메일 발송되었습니다. :-)");

@@ -162,41 +162,18 @@ public class NoticeController {
 		}
 	}
 
-	// 전체 페이지 구하는 메소드
-	public int getPageCount(int numPerPage, int dataCount) {
-		int pageCount = 0;
-
-		pageCount = dataCount / numPerPage;
-
-		if (dataCount % numPerPage != 0)
-			pageCount++;
-
-		return pageCount;
-	}
-
-	// 에러 처리
-	private ResponseEntity<String> exceptionHandling(Exception e) {
-		return new ResponseEntity<String>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	}
 
 	// 공지사항 핀찍힌 공지 리스트 조회
-	@GetMapping("/pinnotices")
+	@GetMapping("/notices/pin")
 	public ResponseEntity<?> getpinNoticeList() {
 
 		try {
-			int numPerPage = 10;
 
 			List<Notice> list = service.selectpin();
-			int noticeNum = service.getSize();
-			int pageCount = getPageCount(10, noticeNum);
 
 			if (list != null && list.size() != 0) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("list", list);
-				map.put("noticeNum", noticeNum);
-				map.put("pageCount", pageCount);
 
-				return new ResponseEntity<Map>(map, HttpStatus.OK);
+				return new ResponseEntity<List<Notice>>(list, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
@@ -207,8 +184,8 @@ public class NoticeController {
 		}
 	}
 
-	// 공지사항 수정
-	@PutMapping("/setpin/{no}")
+	// 전체 공지사항으로 등록
+	@PutMapping("/notice/{no}/pin")
 	public ResponseEntity<?> setpin(@PathVariable("no") int no) {
 		System.out.println("수정");
 		
@@ -225,11 +202,9 @@ public class NoticeController {
 					origin.setPin(0);
 				}
 				else if(pinsize >= 3) {
-					System.out.println(pinsize);
-					return new ResponseEntity<String>("full", HttpStatus.ACCEPTED);
-				}
-//				notice.setView(notice.getView() + 1);
-//				service.update(notice);								
+					System.out.println("FULL"+pinsize);
+					return new ResponseEntity<String>("FULL", HttpStatus.OK);
+				}					
 
 				int result = service.update(origin);
 
@@ -249,41 +224,53 @@ public class NoticeController {
 	}
 	
 	
-	// 공지사항 리스트 조회
-		@GetMapping("/search")
-		public ResponseEntity<?> search(@RequestParam("page") int currentPage, @RequestParam("keyword") String keyword ) {
+	// 공지사항 검색 키워드로 리스트 조회
+	@GetMapping("/notices/search")
+	public ResponseEntity<?> search(@RequestParam("page") int currentPage, @RequestParam("keyword") String keyword ) {
 
-			try {
-				int numPerPage = 10;
+		try {
+			int numPerPage = 10;
 
-				logger.info("sdf:{}", currentPage);
-				List<Notice> list = service.search((currentPage - 1) * numPerPage, numPerPage, keyword);
-				int noticeNum = service.getSize();
-				int pageCount = getPageCount(10, noticeNum);
+			logger.info("sdf:{}", currentPage);
+			List<Notice> list = service.search((currentPage - 1) * numPerPage, numPerPage, keyword);
+			int noticeNum = service.getSize();
+			int pageCount = getPageCount(10, noticeNum);
 
-				if (list != null && list.size() != 0) {
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("list", list);
-					map.put("noticeNum", noticeNum);
-					map.put("pageCount", pageCount);
+			if (list != null && list.size() != 0) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("list", list);
+				map.put("noticeNum", noticeNum);
+				map.put("pageCount", pageCount);
 
-					return new ResponseEntity<Map>(map, HttpStatus.OK);
-				} else {
-					return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				return exceptionHandling(e);
+				return new ResponseEntity<Map>(map, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionHandling(e);
 		}
+	}
 	
 	
 	
+	// 전체 페이지 구하는 메소드
+	public int getPageCount(int numPerPage, int dataCount) {
+		int pageCount = 0;
+		
+		pageCount = dataCount / numPerPage;
+		
+		if (dataCount % numPerPage != 0)
+			pageCount++;
+		
+		return pageCount;
+	}
+	
+	// 에러 처리
+	private ResponseEntity<String> exceptionHandling(Exception e) {
+		return new ResponseEntity<String>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }
 
-/*
- * [v] GET /notices?page= 공지사항 리스트 조회 [v] GET /notice/{no} 공지사항 게시물 조회 [v] POST
- * /notice 공지사항 등록 [v] PUT /notice/{no} 공지사항 수정 [v] DELETE /notice/{no} 공지사항 삭제
- */

@@ -64,36 +64,9 @@ public class HouseController {
 		}
 	}
 	
+
 	
-//	//아파트 거래내역  지역별 모두 조회 & 년월별 조회
-//	//파라미터 -> 동코드만 or 동코드+연+월
-//	@GetMapping("/deals")
-//	public ResponseEntity<?> getDealsByDate(@RequestParam("code") String dongCode,
-//			@RequestParam(value="year",required=false,defaultValue="0")int year,
-//			@RequestParam(value="month", required=false,defaultValue="0") int month){
-//		logger.info("getDealsByArea call  code:{}  year:{}  month:{}", dongCode, year, month);
-//		List<HouseDeal> list = null;
-//		 try {
-//			 if(year == 0 || month == 0) {
-//				 list = service.fetchDealAll(dongCode);
-//			 }else {
-//				 list = service.fetchDealAll(dongCode, year, month);				 
-//			 }
-//			 
-//			 if(list != null && list.size() != 0) {
-//				 return new ResponseEntity<List<HouseDeal>>(list, HttpStatus.OK);
-//			 }else {
-//				 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//			 }
-//			
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return exceptionHandling(e);
-//		}
-//	}
-	
-	//아파트 거래내역  지역별 모두 조회 & 년월별 조회
-	//파라미터 -> 동코드만 or 동코드+연+월
+	//아파트별 거래내역 조회
 	@GetMapping("/deals")
 	public ResponseEntity<?> getDealsByDate(@RequestParam("apt") String aptCode){
 		logger.info("getDealsByApt call  apt:{} ",aptCode);
@@ -116,74 +89,58 @@ public class HouseController {
 		}
 	}
 	
-	//해당 관심지역으로 하우스 딜 리스트 조회
-	@GetMapping("deals/interest/{dongcode}")
-	public ResponseEntity<?> getDealsByROI(@PathVariable("dongcode") String dongcode){
-		try {
-			List<Interest> list = service.select_detail(dongcode);			
-			if(list != null && list.size() != 0) {
-				return new ResponseEntity<List<Interest>>(list, HttpStatus.OK);
-			}else {
-				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return exceptionHandling(e);
-		}
-	}
-	
-	//아파트 상세조회
-	@GetMapping("/deal/{no}")
-	public ResponseEntity<?> getDeal(@PathVariable("no") long no){
-		 try {
-			 System.out.println(no);
-			 HouseDetail deal = service.fetchHouseDetail(no);
-			 System.out.println(deal);
-			 
-			 if(deal != null) {
-				 return new ResponseEntity<HouseDeal>(deal, HttpStatus.OK);
-			 }else {
-				 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-			 }
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return exceptionHandling(e);
-		}
-	}
+//	//아파트 상세조회
+//	@GetMapping("/deal/{no}")
+//	public ResponseEntity<?> getDeal(@PathVariable("no") long no){
+//		 try {
+//			 System.out.println(no);
+//			 HouseDetail deal = service.fetchHouseDetail(no);
+//			 System.out.println(deal);
+//			 
+//			 if(deal != null) {
+//				 return new ResponseEntity<HouseDeal>(deal, HttpStatus.OK);
+//			 }else {
+//				 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//			 }
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return exceptionHandling(e);
+//		}
+//	}
 	
 
-	@PutMapping("/deal/{no}")
-	public ResponseEntity<?> putDeal(@RequestBody HouseDetail houseDetail, @PathVariable("no") long no1){
-		try {
-			HouseDetail deal = service.fetchHouseDetail(no1);
-			
-			logger.info("no: {}", no1);
-			logger.info("before: {}", deal);
-			logger.info("before detail {}", houseDetail);
-			
-			deal.setApartmentName(houseDetail.getApartmentName());
-			deal.setDealAmount(houseDetail.getDealAmount());
-			deal.setDealYear(houseDetail.getDealYear());
-			deal.setDealMonth(houseDetail.getDealMonth());
-			deal.setDealDay(houseDetail.getDealDay());
-			logger.info("ApartmentName - {}", houseDetail.getApartmentName());
-			logger.info("ApartmentName - {}", deal.getApartmentName());
-			logger.info("after: {}", deal);
-			int result = service.update(deal);
-			logger.info("after11: {}", result);
-			
-			if(result != 0) {
-				return new ResponseEntity<HouseDetail>(deal, HttpStatus.OK);
-			}else {
-				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return exceptionHandling(e);
-		}
-	}
+//	@PutMapping("/deal/{no}")
+//	public ResponseEntity<?> putDeal(@RequestBody HouseDetail houseDetail, @PathVariable("no") long no1){
+//		try {
+//			HouseDetail deal = service.fetchHouseDetail(no1);
+//			
+//			logger.info("no: {}", no1);
+//			logger.info("before: {}", deal);
+//			logger.info("before detail {}", houseDetail);
+//			
+//			deal.setApartmentName(houseDetail.getApartmentName());
+//			deal.setDealAmount(houseDetail.getDealAmount());
+//			deal.setDealYear(houseDetail.getDealYear());
+//			deal.setDealMonth(houseDetail.getDealMonth());
+//			deal.setDealDay(houseDetail.getDealDay());
+//			logger.info("ApartmentName - {}", houseDetail.getApartmentName());
+//			logger.info("ApartmentName - {}", deal.getApartmentName());
+//			logger.info("after: {}", deal);
+//			int result = service.update(deal);
+//			logger.info("after11: {}", result);
+//			
+//			if(result != 0) {
+//				return new ResponseEntity<HouseDetail>(deal, HttpStatus.OK);
+//			}else {
+//				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//			}
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return exceptionHandling(e);
+//		}
+//	}
 	
 	//관심지역 추가
 	@PostMapping("/interest")
@@ -203,7 +160,7 @@ public class HouseController {
 	
 	
 	//관심지역리스트 조회
-	@GetMapping("/interest/{id}")
+	@GetMapping("/interests/{id}")
 	public ResponseEntity<?> getROIs(@PathVariable("id") String id){
 
 		try {
@@ -221,8 +178,8 @@ public class HouseController {
 	}
 	
 	// 관심지역 삭제
-	@DeleteMapping("/interest/{id}/{dongCode}") 
-	public ResponseEntity<String> deleteROI(@PathVariable("id") String id, @PathVariable("dongCode") String dongCode) {
+	@DeleteMapping("{id}/interest/{dongCode}") 
+	public ResponseEntity<?> deleteROI(@PathVariable("id") String id, @PathVariable("dongCode") String dongCode) {
 		try {
 			Interest temp = new Interest();
 			temp.setId(id);
@@ -231,10 +188,10 @@ public class HouseController {
 			
 			if(result != 0) {
 				logger.info("관심지역삭제 성공");
-				return new ResponseEntity<String>("success", HttpStatus.OK);
+				return new ResponseEntity<Void>(HttpStatus.OK);
 			}else {
 				logger.info("관심지역삭제 실패");
-				return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

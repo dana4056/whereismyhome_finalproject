@@ -74,7 +74,10 @@ export default {
 
 
 <style>
-
+.wrap{
+    width: 837px;
+    margin: 0 auto;
+}
 
 
 .flex-container {

@@ -32,7 +32,6 @@
       :bordered=true
       :small=true
       :hover=true
-      :fixed=true
       :table-variant="'light'"
       :head-variant="'dark'"
       :items="fetchFreeboard"
@@ -79,8 +78,8 @@ export default {
       for(let notice of notices){
         if(idx == 5) break;
         let obj = {
-          title:notice.title,
-          content: notice.content
+          title:notice.title.length >10?notice.title.substring(0,10)+"...":notice.title,
+          content: notice.content.length >25?notice.content.substring(0,25)+"...":notice.content
         }
         list.push(obj);
         idx++;
@@ -94,8 +93,8 @@ export default {
       for(let commu of community){
         if(idx == 5) break;
         let obj = {
-          title:commu.title,
-          content: commu.content
+          title:commu.title.length >10?commu.title.substring(0,10)+"...":commu.title,
+          content: commu.content.length >25?commu.content.substring(0,25)+"...":commu.content
         }
         list.push(obj);
         idx++;
@@ -106,7 +105,8 @@ export default {
   created() {
     const temp = {
         p: 1,
-        type: 0,        
+        type: 0,    
+        area:""    
     };
     this.$store.dispatch('getNoticeList', 1);
     this.$store.dispatch('getFreeboardList', temp);

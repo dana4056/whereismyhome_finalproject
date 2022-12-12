@@ -112,7 +112,7 @@ export default new Vuex.Store({
       state.page = page;
     },
     SET_PIN_NOTICE_LIST(state, data) {
-      state.pinNotices = data.list;
+      state.pinNotices = data;
     },
     //Q&A
     SET_QNA_LIST(state, list) {

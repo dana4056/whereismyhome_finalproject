@@ -120,17 +120,17 @@ public class UserController {
 
 	//회원탈퇴
 	@DeleteMapping("/user/{id}")
-	public ResponseEntity<String> delUser(@PathVariable("id") String id){
+	public ResponseEntity<?> delUser(@PathVariable("id") String id){
 
 		try {
 			int result = service.deleteUser(id);
 			
 			if(result != 0) {
 				logger.info("[UserController.delUser] 회원탈퇴 성공");
-				return new ResponseEntity<String>("success", HttpStatus.OK);
+				return new ResponseEntity<Void>(HttpStatus.OK);
 			}else {
 				logger.info("[UserController.delUser] 회원탈퇴 실패");
-				return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -258,7 +258,7 @@ public class UserController {
 	
 	// 비밀번호 찾기 API
 	// 회원의 이메일과 비교해서 같으면 메일을 보내준다. 
-    @PostMapping("/check/findPw/sendEmail")
+    @PostMapping("/user/find-pw")
     public ResponseEntity<?> sendEmail(@RequestBody HashMap<String, String> map){
     	String userEmail = map.get("userEmail");
     	String id = map.get("id");
@@ -270,10 +270,10 @@ public class UserController {
 			if(SendEmailService.checkEmail(userEmail, id)) {
 				dto = SendEmailService.createMailAndChangePassword(userEmail, id);
 				SendEmailService.mailSend(dto);
-				return new ResponseEntity<String>("success", HttpStatus.OK);
+				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
 			else {
-				return new ResponseEntity<String>("fail", HttpStatus.NO_CONTENT);
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

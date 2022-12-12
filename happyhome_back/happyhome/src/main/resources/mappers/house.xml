@@ -25,7 +25,7 @@
 	  <result column="no" property="no"/>
 	</resultMap>
 
-
+ 
     <!-- public List<HouseDetail> fetchHomeAll(String dongCode) -->
 	<select id="fetchHomeAll" parameterType="String" resultMap="home">
 		select h.aptCode, h.apartmentName, h.lat, h.lng,

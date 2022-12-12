@@ -74,7 +74,7 @@ public class QnaController {
 	}
 	
 	//Q&A 리스트 인기순 조회
-		@GetMapping("/qnasbygood")
+		@GetMapping("/qnas/good")
 		public ResponseEntity<?> getQnaListbygood(@RequestParam("page") int currentPage){
 			
 			try {
@@ -103,33 +103,33 @@ public class QnaController {
 		}
 	
 		//Q&A 리스트 조회순 조회
-				@GetMapping("/qnasbyview")
-				public ResponseEntity<?> getQnaListbyview(@RequestParam("page") int currentPage){
+		@GetMapping("/qnas/view")
+		public ResponseEntity<?> getQnaListbyview(@RequestParam("page") int currentPage){
+		
+			try {
+				int numPerPage = 10;
+				
+				List<Qna> list = service.selectbyview((currentPage-1)*numPerPage, numPerPage);
+				int qnaNum = service.getSize();
+				int pageCount = getPageCount(10, qnaNum);
+				
+				if(list != null && list.size() != 0) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("list", list);
+					map.put("qnaNum", qnaNum);
+					map.put("pageCount", pageCount);
 					
-					try {
-						int numPerPage = 10;
-						
-						List<Qna> list = service.selectbyview((currentPage-1)*numPerPage, numPerPage);
-						int qnaNum = service.getSize();
-						int pageCount = getPageCount(10, qnaNum);
-						
-						if(list != null && list.size() != 0) {
-							Map<String, Object> map = new HashMap<String, Object>();
-							map.put("list", list);
-							map.put("qnaNum", qnaNum);
-							map.put("pageCount", pageCount);
-							
-							return new ResponseEntity<Map>(map, HttpStatus.OK);
-						}
-						else {
-							return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-						}
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-						return exceptionHandling(e);
-					}
+					return new ResponseEntity<Map>(map, HttpStatus.OK);
 				}
+				else {
+					return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				return exceptionHandling(e);
+			}
+	}
 		
 	//Q&A 게시물 조회
 	@GetMapping("/qna/{no}")
@@ -138,11 +138,11 @@ public class QnaController {
 		try {
 			Qna qna = service.getQna(no);
 			
-			//조회수 올리기
-			qna.setView(qna.getView()+1);
-			service.update(qna);
-			
 			if(qna != null) {
+				//조회수 올리기
+				qna.setView(qna.getView()+1);
+				service.update(qna);
+				
 				return new ResponseEntity<Qna>(qna, HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);				
@@ -219,23 +219,9 @@ public class QnaController {
 		}
 	}
 	
-	//전체 페이지 구하는 메소드
-	public int getPageCount(int numPerPage, int dataCount)
-	{
-		int pageCount = 0;
-		
-		pageCount = dataCount /numPerPage; 
-		
-		if(dataCount % numPerPage != 0 )
-			pageCount++;
-		
-		return pageCount;
-	}
-	
 
-
-	// 커뮤니티 글 좋아요
-	@PutMapping("/qnagood/{no}/{id}")
+	// Q&A 글 좋아요
+	@PutMapping("/qna/{no}/good/{id}")
 	public ResponseEntity<?> Freeboardgood(@PathVariable("no") int no, @PathVariable("id") String id) {
 		
 		try {
@@ -270,7 +256,7 @@ public class QnaController {
 	}
 	
 	//qna좋아요 했는지 안했는지
-    @GetMapping("/qnadidgood/{no}/{id}")
+    @GetMapping("/qna/{no}/good/{id}")
     public ResponseEntity<?> didgood(@PathVariable("no") int no, @PathVariable("id") String id){
         
         try {
@@ -290,6 +276,18 @@ public class QnaController {
 	
 	
 	
+    //전체 페이지 구하는 메소드
+    public int getPageCount(int numPerPage, int dataCount)
+    {
+    	int pageCount = 0;
+    	
+    	pageCount = dataCount /numPerPage; 
+    	
+    	if(dataCount % numPerPage != 0 )
+    		pageCount++;
+    	
+    	return pageCount;
+    }
 	
 	//에러 처리
 	private ResponseEntity<String> exceptionHandling(Exception e) {

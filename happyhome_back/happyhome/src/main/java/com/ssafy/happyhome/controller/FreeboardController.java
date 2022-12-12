@@ -77,7 +77,7 @@ public class FreeboardController {
 	}
 
 	// 커뮤니티 리스트 조회
-	@GetMapping("/freeboardsbygood")
+	@GetMapping("/freeboards/good")
 	public ResponseEntity<?> getFreeboardListbygood(@RequestParam("page") int currentPage, @RequestParam("type") int type, @RequestParam("area") String area) {
 
 		try {
@@ -105,7 +105,7 @@ public class FreeboardController {
 	}
 
 	// 커뮤니티 리스트 조회
-	@GetMapping("/freeboardsbyview")
+	@GetMapping("/freeboards/view")
 	public ResponseEntity<?> getFreeboardListbyview(@RequestParam("page") int currentPage, @RequestParam("type") int type, @RequestParam("area") String area) {
 
 		try {
@@ -139,11 +139,12 @@ public class FreeboardController {
 		try {
 			Freeboard freeboard = service.getFreeboard(no);
 
-			// 조회수 올리기
-			freeboard.setView(freeboard.getView() + 1);
-			service.update(freeboard);
 
 			if (freeboard != null) {
+				// 조회수 올리기
+				freeboard.setView(freeboard.getView() + 1);
+				service.update(freeboard);
+				
 				return new ResponseEntity<Freeboard>(freeboard, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
@@ -154,7 +155,7 @@ public class FreeboardController {
 		}
 	}
 
-	// 커뮤니티 등록(제목이랑 내용만 기입)
+	// 커뮤니티 등록(제목이랑 내용,타입만 기입)
 	@PostMapping("/freeboard")
 	public ResponseEntity<?> createFreeboard(@RequestBody Freeboard freeboard) {
 
@@ -204,13 +205,11 @@ public class FreeboardController {
 	}
 
 	// 커뮤니티 삭제
-	@DeleteMapping("/freeboard/{no}/{id}")
+	@DeleteMapping("/freeboard/{no}")
 	public ResponseEntity<?> deleteFreeboard(@PathVariable("no") int no) {
 
 		try {
-			System.out.println("sdf");
 			int result = service.deleteFreeboard(no);
-			System.out.println("sd222f");
 			if (result != 0) {
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			} else {
@@ -223,27 +222,15 @@ public class FreeboardController {
 		}
 	}
 
-	// 전체 페이지 구하는 메소드
-	public int getPageCount(int numPerPage, int dataCount) {
-		int pageCount = 0;
-
-		pageCount = dataCount / numPerPage;
-
-		if (dataCount % numPerPage != 0)
-			pageCount++;
-
-		return pageCount;
-	}
 
 	// 커뮤니티 글 좋아요
-	@PutMapping("/freeboardgood/{no}/{id}")
+	@PutMapping("/freeboard/{no}/good/{id}")
 	public ResponseEntity<?> Freeboardgood(@PathVariable("no") int no, @PathVariable("id") String id) {
 
 		try {
 			Freeboard origin = service.getFreeboard(no);
 			
 			if (origin != null) {
-				System.out.println("sdf"+service.didgood(id, no));
 				if(service.didgood(id, no) == 0) {
 					origin.setGood(origin.getGood() + 1);
 					service.plusgood(id, no);
@@ -271,24 +258,36 @@ public class FreeboardController {
 	}
 	
 	//커뮤니티 좋아요 했는지 안했는지
-			@GetMapping("/freeboarddidgood/{no}/{id}")
-			public ResponseEntity<?> didgood(@PathVariable("no") int no, @PathVariable("id") String id){
-				
-				try {
-					int result = service.didgood(id, no);
-					
-					if(result == 0 || result == 1) {
-						return new ResponseEntity<Integer>(result, HttpStatus.OK);				
-					}else {
-						return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);								
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-					return exceptionHandling(e);
-				}
+	@GetMapping("/freeboard/{no}/good/{id}")
+	public ResponseEntity<?> didgood(@PathVariable("no") int no, @PathVariable("id") String id){
+		
+		try {
+			int result = service.didgood(id, no);
+			
+			if(result == 0 || result == 1) {
+				return new ResponseEntity<Integer>(result, HttpStatus.OK);				
+			}else {
+				return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);								
 			}
-	
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return exceptionHandling(e);
+		}
+	}
+			
+	// 전체 페이지 구하는 메소드
+	public int getPageCount(int numPerPage, int dataCount) {
+		int pageCount = 0;
+
+		pageCount = dataCount / numPerPage;
+
+		if (dataCount % numPerPage != 0)
+			pageCount++;
+
+		return pageCount;
+	}
+
 
 	// 에러 처리
 	private ResponseEntity<String> exceptionHandling(Exception e) {

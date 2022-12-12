@@ -42,7 +42,6 @@ import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
-@RequestMapping("/comment")
 public class CommentController {
 
 	private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
@@ -52,50 +51,15 @@ public class CommentController {
 	@Autowired
 	CommentService commentService;
 
-	@ApiOperation(value = "id에 해당하는 도서평 목록을 반환한다.", response = List.class)
-	@GetMapping("{id}")
+	//특정 qna 게시물의 모든 댓글 조회
+	@GetMapping("qna/{id}/comments")
 	public ResponseEntity<List<Comment>> listComment(@PathVariable("id") String id) {
-		logger.debug("listComment - 호출");
 		return new ResponseEntity<>(commentService.list(id), HttpStatus.OK);
 	}
-
-	@ApiOperation(value = "새로운 도서평을 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@PostMapping
-	public ResponseEntity<String> createComment(@RequestBody Comment commentDto) {
-		logger.debug("createComment - 호출");
-		if(commentService.create(commentDto)) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
-	}
-
-	@ApiOperation(value = "글번호가 comment_no에 해당하는 도서평을 수정한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@PutMapping
-	public ResponseEntity<String> modifyComment(@RequestBody Comment commentDto) {
-		logger.debug("modifyComment - 호출");
-		logger.debug("" + commentDto);
-		System.out.println("댓글 수정하자!!!"  + commentDto);
-		if(commentService.modify(commentDto)) {
-			System.out.println("댓글 수정 성공!!!");
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
-	}
-
-	@ApiOperation(value = "글번호가 comment_no에 해당하는 도서평을 삭제한다. 그리고 DB삭제 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
-	@DeleteMapping("{commentNO}")
-	public ResponseEntity<String> deleteComment(@PathVariable("commentNO") int commentNO) {
-		logger.debug("deleteBook - 호출");
-		if(commentService.delete(commentNO)) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
-	}
 	
-	@ApiOperation(value = "글번호가 comment_no에 해당하는 댓글을 가져온다.", response = String.class)
-	@GetMapping
+	//댓글 하나 가져오기
+	@GetMapping("qna/comment")
 	public ResponseEntity<?> getComment(@RequestParam("no") int commentNO) {
-		logger.debug("getBook - 호출");
 
 		Comment comment = commentService.select(commentNO);
 		
@@ -106,6 +70,35 @@ public class CommentController {
 		}
 
 	}
+	
+	//댓글 등록
+	@PostMapping("qna/comment")
+	public ResponseEntity<?> createComment(@RequestBody Comment commentDto) {
+		if(commentService.create(commentDto)) {
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+
+	//댓글 수정
+	@PutMapping("qna/comment")
+	public ResponseEntity<?> modifyComment(@RequestBody Comment commentDto) {
+		if(commentService.modify(commentDto)) {
+			System.out.println("댓글 수정 성공!!!");
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+
+	//댓글 삭제
+	@DeleteMapping("qna/comment/{commentNO}")
+	public ResponseEntity<?> deleteComment(@PathVariable("commentNO") int commentNO) {
+		if(commentService.delete(commentNO)) {
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+	}
+	
 	
 }
 
