@@ -9,14 +9,6 @@ import AppFreeboard from '@/views/AppFreeboard'
 import AppInterest from '@/views/AppInterest'
 import HomePage from '@/components/main/HomePage'
 import AppUser from '@/views/AppUser'
-// import HomePage from '../views/HomePage.vue'
-// import HouseDealDetail from '../views/HouseDealDetail.vue'
-// import NoticeList from '../views/NoticeList.vue'
-// import NoticeDetail from '../views/NoticeDetail.vue'
-// import NoticeModify from '../views/NoticeModify.vue'
-// import InterestRegist from '../views/InterestRegist.vue'
-// import InterestList from '../views/InterestList.vue'
-// import HouseDealByInterest from '../views/HouseDealByInterest.vue'
 
 
 import YoutubePage from '@/components/youtube/YoutubePage'
@@ -46,11 +38,6 @@ const routes = [
         path: 'list',
         name: 'house-list',
         component: () => import("@/components/house/HouseDealList")
-      },
-      {
-        path: 'view/:no',
-        name: 'house-view',
-        component: () => import("@/components/house/HouseDealDetail")
       },
       {
         path: 'interest',

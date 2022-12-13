@@ -529,7 +529,7 @@ export default {
           longi:position.longi,
         }
         //좋아요 여부 확인
-        http.get(`/mymapdidgood`, { params })
+        http.get(`/mymap`, { params })
         .then(({data}) => {
           if(data == 1){
             this.isGood_H = true;
@@ -548,7 +548,7 @@ export default {
           longi:position.longi,
         }
         //좋아요 여부 확인
-        http.get(`/mymapdidgood`, { params })
+        http.get(`/mymap`, { params })
         .then(({data}) => {
           if(data == 1){
             this.isGood_P = true;
@@ -897,7 +897,7 @@ export default {
               longi:place.x,
             }
 
-            http.get(`/mymapdidgood`, { params })
+            http.get(`/mymap`, { params })
             .then(({data}) => {
               if(data == 1){
                 $vm.isGood_P = true;

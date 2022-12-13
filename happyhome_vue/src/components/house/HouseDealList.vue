@@ -425,7 +425,7 @@ export default {
         longi:position.lng,
       }
 
-      http.get(`/mymapdidgood`, { params })
+      http.get(`/mymap`, { params })
       .then(({data}) => {
         if(data == 1){
           this.isGood = true;
