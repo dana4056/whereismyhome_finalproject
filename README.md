@@ -104,4 +104,6 @@ Toast 알림 기능 구현
 
 ## 프로젝트 산출물
 
-추후 UCC 업로드 예정
+<iframe width="956" height="538" src="https://youtu.be/OGNu8eZhUes" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+UCC 링크 : https://youtu.be/OGNu8eZhUes
