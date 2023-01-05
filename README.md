@@ -103,8 +103,8 @@ Toast 알림 기능 구현
 
 
 ## 프로젝트 산출물
+[![해피하우스 시연영상](http://img.youtube.com/vi/OGNu8eZhUes/0.jpg)](https://www.youtube.com/watch?v=OGNu8eZhUes&t=0s) 
 
 
-<iframe width="552" height="311" src="http://www.youtube.com/embed/OGNu8eZhUes" title="해피하우스 시연영상" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 UCC 링크 : https://youtu.be/OGNu8eZhUes
